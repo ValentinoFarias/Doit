@@ -1,17 +1,10 @@
-<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required
-=======
-<<<<<<< HEAD
->>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .models import FocusItem, Note, Task
-=======
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
->>>>>>> nat
 
 
 # Create your views here.
@@ -24,11 +17,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-<<<<<<< HEAD
 @login_required
-=======
-<<<<<<< HEAD
->>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
 def todolist(request):
     if request.method == "POST":
         if "toggle_task" in request.POST:
@@ -76,7 +65,8 @@ def delete_task(request, task_id: int):
     task = get_object_or_404(Task, id=task_id, user=request.user)
     task.delete()
     return redirect("todolist")
-=======
+
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -88,4 +78,3 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, 'register.html', {'form': form})
->>>>>>> nat
