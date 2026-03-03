@@ -22,18 +22,23 @@
   =============================== */
 
   let demoTasks = [
-    { id: 1, title: "Write project plan", completed: false },
-    { id: 2, title: "Design wireframe", completed: false },
-    { id: 3, title: "Build task model", completed: false }
+    { id: 1, title: "☕ Morning coffee and team standup", completed: false },
+    { id: 2, title: "📧 Reply to client emails", completed: false },
+    { id: 3, title: "💻 Code review for PR #42", completed: false },
+    { id: 4, title: "📝 Update project documentation", completed: false },
+    { id: 5, title: "🎨 Design new landing page mockup", completed: false },
+    { id: 6, title: "🚀 Deploy to production", completed: false }
   ];
 
   /* ===============================
      INIT
   =============================== */
 
-  document.addEventListener("DOMContentLoaded", () => {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", renderTasks);
+  } else {
     renderTasks();
-  });
+  }
 
   /* ===============================
      RENDER TASKS
@@ -62,14 +67,21 @@
     const button = document.createElement("button");
 
     button.className =
-      "list-group-item list-group-item-action d-flex justify-content-between align-items-center";
+      "list-group-item list-group-item-action d-flex align-items-center gap-3 py-3";
+
+    button.style.cursor = "pointer";
+
+    const checkbox = task.completed 
+      ? '<span class="fs-4">✅</span>' 
+      : '<span class="fs-4">⬜</span>';
 
     button.innerHTML = `
-      <span class="${task.completed ? 'text-decoration-line-through text-muted' : ''}">
+      ${checkbox}
+      <span class="flex-grow-1 text-start ${task.completed ? 'text-decoration-line-through text-muted' : ''}">
         ${task.title}
       </span>
-      <span class="badge bg-${task.completed ? 'success' : 'secondary'}">
-        ${task.completed ? "✔ Done" : "Pending"}
+      <span class="badge ${task.completed ? 'bg-success' : 'bg-secondary'} rounded-pill">
+        ${task.completed ? "Done" : "To Do"}
       </span>
     `;
 
