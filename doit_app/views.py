@@ -1,6 +1,17 @@
+<<<<<<< HEAD
+from django.contrib.auth.decorators import login_required
+=======
+<<<<<<< HEAD
+>>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+
+from .models import FocusItem, Note, Task
+=======
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+>>>>>>> nat
 
 
 # Create your views here.
@@ -13,6 +24,59 @@ def home(request):
     return render(request, 'home.html')
 
 
+<<<<<<< HEAD
+@login_required
+=======
+<<<<<<< HEAD
+>>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
+def todolist(request):
+    if request.method == "POST":
+        if "toggle_task" in request.POST:
+            try:
+                task_id = int(request.POST.get("toggle_task") or "")
+            except (TypeError, ValueError):
+                return redirect("todolist")
+
+            task = get_object_or_404(Task, id=task_id, user=request.user)
+            task.is_completed = not task.is_completed
+            task.save(update_fields=["is_completed", "updated_at"])
+            return redirect("todolist")
+
+        if "delete_task" in request.POST:
+            try:
+                task_id = int(request.POST.get("delete_task") or "")
+            except (TypeError, ValueError):
+                return redirect("todolist")
+
+            task = get_object_or_404(Task, id=task_id, user=request.user)
+            task.delete()
+            return redirect("todolist")
+
+        if "add_task" in request.POST:
+            title = (request.POST.get("new_task") or "").strip()
+            if title:
+                Task.objects.create(title=title, user=request.user)
+            return redirect("todolist")
+
+    tasks = Task.objects.filter(user=request.user)
+    focus_items = FocusItem.objects.filter(user=request.user)
+    notes = Note.objects.filter(user=request.user)
+
+    context = {
+        "tasks": tasks,
+        "focus_items": focus_items,
+        "notes": notes,
+        "today": timezone.localdate().strftime("%Y-%m-%d"),
+    }
+    return render(request, "todolist.html", context)
+
+
+@login_required
+def delete_task(request, task_id: int):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+    task.delete()
+    return redirect("todolist")
+=======
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -24,3 +88,4 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, 'register.html', {'form': form})
+>>>>>>> nat

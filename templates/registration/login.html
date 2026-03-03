@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+<<<<<<< HEAD
+<div class="container py-4" style="max-width: 520px;">
+  <h1 class="h4 mb-3">Login</h1>
+
+  {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+      Your username and password didn’t match. Please try again.
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn tickr-btn-accent">Login</button>
+  </form>
+</div>
+{% endblock %}
+=======
 <section class="py-5">
   <div class="container">
     <div class="row justify-content-center">
@@ -24,3 +42,4 @@
   </div>
 </section>
 {% endblock content %}
+>>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
