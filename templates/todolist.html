@@ -12,7 +12,7 @@
 
         <!-- LEFT COLUMN - TO DO LIST -->
         <div class="col-lg-7 mb-4">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm h-100 tickr-panel">
                 <div class="card-body">
 
                     <h4 class="mb-3">To Do List</h4>
@@ -21,10 +21,10 @@
                         <div class="input-group mb-3">
                             <input type="text"
                                    name="new_task"
-                                   class="form-control"
+                                   class="form-control tickr-input"
                                    placeholder="Add new task..."
                                    required>
-                            <button class="btn btn-primary" type="submit" name="add_task">
+                            <button class="btn tickr-btn-accent" type="submit" name="add_task">
                                 Add
                             </button>
                         </div>
@@ -33,7 +33,7 @@
                         <ul class="list-group">
 
                             {% for task in tasks %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <li class="list-group-item d-flex justify-content-between align-items-center tickr-list-item">
 
                                     <div>
                                         <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
@@ -41,7 +41,7 @@
                                         </span>
 
                                         {% if task.due_date|date:"Y-m-d" == today %}
-                                            <span class="badge bg-danger ms-2">
+                                            <span class="badge tickr-badge-alert ms-2">
                                                 !
                                             </span>
                                         {% endif %}
@@ -51,14 +51,20 @@
                                         <button type="submit"
                                                 name="toggle_task"
                                                 value="{{ task.id }}"
-                                                class="btn btn-sm {% if task.is_completed %}btn-success{% else %}btn-outline-success{% endif %}">
+                                                class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}"
+                                                formnovalidate
+                                                aria-label="Toggle complete"
+                                                title="Mark complete">
                                             ✓
                                         </button>
 
                                         <button type="submit"
                                                 name="delete_task"
                                                 value="{{ task.id }}"
-                                                class="btn btn-sm btn-outline-danger ms-2">
+                                                class="btn btn-sm tickr-btn-outline-primary ms-2"
+                                                formnovalidate
+                                                aria-label="Delete task"
+                                                title="Delete">
                                             ✕
                                         </button>
                                     </div>
@@ -81,13 +87,13 @@
         <div class="col-lg-5">
 
             <!-- FOCUS -->
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow-sm mb-4 tickr-panel">
                 <div class="card-body">
 
                     <h5 class="mb-3">Focus</h5>
 
                     <textarea name="focus_content"
-                              class="form-control"
+                              class="form-control tickr-input"
                               rows="4"
                               placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
 
@@ -96,27 +102,20 @@
 
 
             <!-- NOTES -->
-            <div class="card shadow-sm">
+            <div class="card shadow-sm tickr-panel">
                 <div class="card-body">
 
                     <h5 class="mb-3">Notes</h5>
 
                     <textarea name="notes_content"
-                              class="form-control"
+                              class="form-control tickr-input"
                               rows="6"
                               placeholder="Write your notes here...">{% for note in notes %}{{ note.content }}{% endfor %}</textarea>
 
                 </div>
             </div>
 
-            <!-- SAVE BUTTON -->
-            <div class="text-end mt-3">
-                <button type="submit"
-                        name="save"
-                        class="btn btn-success px-4">
-                    Save
-                </button>
-            </div>
+            <!-- Save button removed (user-linked lists next) -->
 
         </div>
 

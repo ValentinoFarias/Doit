@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+from django.contrib.auth.decorators import login_required
+=======
+<<<<<<< HEAD
+>>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -21,6 +25,10 @@ def home(request):
 
 
 <<<<<<< HEAD
+@login_required
+=======
+<<<<<<< HEAD
+>>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
 def todolist(request):
     if request.method == "POST":
         if "toggle_task" in request.POST:
@@ -29,7 +37,7 @@ def todolist(request):
             except (TypeError, ValueError):
                 return redirect("todolist")
 
-            task = get_object_or_404(Task, id=task_id)
+            task = get_object_or_404(Task, id=task_id, user=request.user)
             task.is_completed = not task.is_completed
             task.save(update_fields=["is_completed", "updated_at"])
             return redirect("todolist")
@@ -40,48 +48,19 @@ def todolist(request):
             except (TypeError, ValueError):
                 return redirect("todolist")
 
-            task = get_object_or_404(Task, id=task_id)
+            task = get_object_or_404(Task, id=task_id, user=request.user)
             task.delete()
             return redirect("todolist")
 
         if "add_task" in request.POST:
             title = (request.POST.get("new_task") or "").strip()
             if title:
-                Task.objects.create(title=title)
+                Task.objects.create(title=title, user=request.user)
             return redirect("todolist")
 
-        if "save" in request.POST:
-            if "completed_tasks" in request.POST:
-                selected_ids_raw = request.POST.getlist("completed_tasks")
-                selected_ids: list[int] = []
-                for value in selected_ids_raw:
-                    try:
-                        selected_ids.append(int(value))
-                    except (TypeError, ValueError):
-                        continue
-
-                Task.objects.exclude(id__in=selected_ids).update(is_completed=False)
-                Task.objects.filter(id__in=selected_ids).update(is_completed=True)
-
-            focus_content = request.POST.get("focus_content")
-            if focus_content is not None:
-                FocusItem.objects.all().delete()
-                focus_text = focus_content.strip()
-                if focus_text:
-                    FocusItem.objects.create(title=focus_text)
-
-            notes_content = request.POST.get("notes_content")
-            if notes_content is not None:
-                Note.objects.all().delete()
-                notes_text = notes_content.strip()
-                if notes_text:
-                    Note.objects.create(content=notes_text)
-
-            return redirect("todolist")
-
-    tasks = Task.objects.all()
-    focus_items = FocusItem.objects.all()
-    notes = Note.objects.all()
+    tasks = Task.objects.filter(user=request.user)
+    focus_items = FocusItem.objects.filter(user=request.user)
+    notes = Note.objects.filter(user=request.user)
 
     context = {
         "tasks": tasks,
@@ -92,8 +71,9 @@ def todolist(request):
     return render(request, "todolist.html", context)
 
 
+@login_required
 def delete_task(request, task_id: int):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(Task, id=task_id, user=request.user)
     task.delete()
     return redirect("todolist")
 =======
