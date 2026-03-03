@@ -1,7 +1,10 @@
-{% url 'home' as home_url %} {% url 'task_list' as task_list_url %} {% url
-'dashboard' as dashboard_url %} {% url 'account_login' as login_url %} {% url
-'account_signup' as signup_url %} {% url 'account_logout' as logout_url %}
-
+{% url 'home' as home_url %}
+{% url 'task_list' as task_list_url %}
+{% url 'dashboard' as dashboard_url %}
+{% url 'account_login' as login_url %}
+{% url 'account_signup' as signup_url %}
+{% url 'account_logout' as logout_url %}
+{% load static %}
 <!doctype html>
 <html class="h-100" lang="en">
   <head>
@@ -71,7 +74,7 @@
               <a
                 class="nav-link {% if request.path == logout_url %}active"
                 aria-current="page{% endif %}"
-                href="{% url 'account_logout' %}"
+                {% comment %} href="{% url 'account_logout' %}" {% endcomment %}
                 >Logout</a
               >
             </li>
@@ -80,7 +83,7 @@
               <a
                 class="nav-link {% if request.path == signup_url %}active"
                 aria-current="page{% endif %}"
-                href="{% url 'account_signup' %}"
+                {% comment %} href="{% url 'account_signup' %}" {% endcomment %}
                 >Register</a
               >
             </li>
@@ -88,7 +91,7 @@
               <a
                 class="nav-link {% if request.path == login_url %}active"
                 aria-current="page{% endif %}"
-                href="{% url 'account_login' %}"
+                {% comment %} href="{% url 'account_login' %}" {% endcomment %}
                 >Login</a
               >
             </li>
