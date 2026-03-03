@@ -4,24 +4,95 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doit Home</title>
+    <title>TickR - Where Plans Become Progress</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <h1 class="hero-title">Tickr</h1>
-    <h2>Where plans become progress</h2>
 
-    <div class="hero-image">
-      <img src="{% static 'images/hero.png' %}" alt="Hero Image" />
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <span>|</span>
+        <a href="#">To Do Lists</a>
+      </div>
+      <div class="nav-actions">
+        <a href="#" class="btn btn-primary">Sign Up</a>
+        <a href="#" class="btn btn-outline">Log In</a>
+      </div>
+    </nav>
 
-    <div class="hero-bullets">
-      <span>✔ Stay Focused</span>
-      <span>✔ Avoid Overcommitting</span>
-      <span>✔ Track Progress Automatically</span>
-      <span>✔ Plan Intentionally</span>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1 class="hero-title">TickR</h1>
+      <h2 class="hero-subtitle">Where plans become progress</h2>
+      <div class="hero-image">
+        <img src="{% static 'images/hero.png' %}" alt="Hero Image" />
+      </div>
+      <div class="hero-bullets">
+        <span>✔ Stay Focused</span>
+        <span>✔ Avoid Overcommitting</span>
+        <span>✔ Track Progress Automatically</span>
+        <span>✔ Plan Intentionally</span>
+      </div>
+      <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+    </section>
 
-    <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+    <!-- Features Section -->
+    <section class="features">
+      <div class="feature-card">
+        <h3>Tasks</h3>
+        <p>Create and manage your daily tasks with ease. Stay on top of what matters most.</p>
+        <a href="#" class="btn btn-outline">Demo</a>
+      </div>
+      <div class="feature-card">
+        <h3>Edit Tasks</h3>
+        <p>Update task details anytime. Adapt your plans as priorities shift.</p>
+        <a href="#" class="btn btn-outline">Demo</a>
+      </div>
+      <div class="feature-card">
+        <h3>Complete Tasks</h3>
+        <p>Mark tasks as done and track your progress automatically.</p>
+        <a href="#" class="btn btn-outline">Demo</a>
+      </div>
+      <div class="feature-card">
+        <h3>Delete Tasks</h3>
+        <p>Remove tasks that are no longer relevant. Keep your list clean and focused.</p>
+        <a href="#" class="btn btn-outline">Demo</a>
+      </div>
+    </section>
+
+    <!-- Interactive Preview Section -->
+    <section class="preview">
+      <h2>Interactive Preview</h2>
+      <p class="preview-label">"See It In Action"</p>
+      <p>You can include:</p>
+      <ul>
+        <li>Static mock planner mockup</li>
+        <li>Or a mini interactive preview</li>
+        <li>Or animated GIF showing task addition</li>
+      </ul>
+      <p>Even a fake UI that looks clickable works. This makes your project feel real.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <a href="#" class="btn btn-primary">Register NOW</a>
+      <input type="email" placeholder="Your Email" class="footer-email" />
+      <div class="footer-socials">
+        <a href="#">&#x1F426;</a>
+        <a href="#">&#x1D54F;</a>
+        <a href="#">&#x1F4F7;</a>
+        <a href="#">&#x25B6;</a>
+      </div>
+      <div class="footer-bottom">
+        <span>Copyright &copy; 2026 Company name. All Rights Reserved.</span>
+        <div>
+          <a href="#">Terms of Use</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </footer>
+
   </body>
 </html>
