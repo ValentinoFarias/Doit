@@ -1,9 +1,17 @@
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
 
 
 class Task(models.Model):
+	user = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		on_delete=models.CASCADE,
+		related_name="tasks",
+		null=True,
+		blank=True,
+	)
 	title = models.CharField(max_length=255)
 	is_completed = models.BooleanField(default=False)
 	due_date = models.DateField(blank=True, null=True)
@@ -18,6 +26,13 @@ class Task(models.Model):
 
 
 class FocusItem(models.Model):
+	user = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		on_delete=models.CASCADE,
+		related_name="focus_items",
+		null=True,
+		blank=True,
+	)
 	title = models.TextField()
 	updated_at = models.DateTimeField(auto_now=True)
 
@@ -26,6 +41,13 @@ class FocusItem(models.Model):
 
 
 class Note(models.Model):
+	user = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		on_delete=models.CASCADE,
+		related_name="notes",
+		null=True,
+		blank=True,
+	)
 	content = models.TextField()
 	updated_at = models.DateTimeField(auto_now=True)
 

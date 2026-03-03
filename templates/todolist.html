@@ -52,6 +52,7 @@
                                                 name="toggle_task"
                                                 value="{{ task.id }}"
                                                 class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}"
+                                                formnovalidate
                                                 aria-label="Toggle complete"
                                                 title="Mark complete">
                                             ✓
@@ -61,6 +62,7 @@
                                                 name="delete_task"
                                                 value="{{ task.id }}"
                                                 class="btn btn-sm tickr-btn-outline-primary ms-2"
+                                                formnovalidate
                                                 aria-label="Delete task"
                                                 title="Delete">
                                             ✕
@@ -113,14 +115,7 @@
                 </div>
             </div>
 
-            <!-- SAVE BUTTON -->
-            <div class="text-end mt-3">
-                <button type="submit"
-                        name="save"
-                        class="btn tickr-btn-accent px-4">
-                    Save
-                </button>
-            </div>
+            <!-- Save button removed (user-linked lists next) -->
 
         </div>
 

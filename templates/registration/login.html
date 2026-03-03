@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 520px;">
+  <h1 class="h4 mb-3">Login</h1>
+
+  {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+      Your username and password didn’t match. Please try again.
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn tickr-btn-accent">Login</button>
+  </form>
+</div>
+{% endblock %}
