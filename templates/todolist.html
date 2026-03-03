@@ -5,9 +5,6 @@
 
 <div class="container py-4">
 
-    <form method="POST">
-        {% csrf_token %}
-
     <div class="row">
 
         <!-- LEFT COLUMN - TO DO LIST -->
@@ -18,56 +15,65 @@
                     <h4 class="mb-3">To Do List</h4>
 
                         <!-- Add New Task -->
-                        <div class="input-group mb-3">
-                            <input type="text"
-                                   name="new_task"
-                                   class="form-control tickr-input"
-                                   placeholder="Add new task..."
-                                   required>
-                            <button class="btn tickr-btn-accent" type="submit" name="add_task">
-                                Add
-                            </button>
-                        </div>
+                        <form method="POST" class="mb-3">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text"
+                                       name="new_task"
+                                       class="form-control tickr-input"
+                                       placeholder="Add new task..."
+                                       required>
+                                <button class="btn tickr-btn-accent" type="submit" name="add_task">
+                                    Add
+                                </button>
+                            </div>
+                        </form>
 
                         <!-- Task List -->
                         <ul class="list-group">
 
                             {% for task in tasks %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center tickr-list-item">
+                                <li class="list-group-item d-flex align-items-center tickr-list-item">
 
-                                    <div>
+                                    <div class="d-flex align-items-center gap-2 me-3">
+                                        <form method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                    name="toggle_task"
+                                                    value="{{ task.id }}"
+                                                    class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}"
+                                                    aria-label="Toggle complete"
+                                                    title="Mark complete">
+                                                ✓
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                    name="delete_task"
+                                                    value="{{ task.id }}"
+                                                    class="btn btn-sm tickr-btn-outline-primary"
+                                                    aria-label="Delete task"
+                                                    title="Delete">
+                                                ✕
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <div class="flex-grow-1">
                                         <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
                                             {{ task.title }}
                                         </span>
 
                                         {% if task.due_date|date:"Y-m-d" == today %}
-                                            <span class="badge tickr-badge-alert ms-2">
-                                                !
-                                            </span>
+                                            <span class="badge tickr-badge-alert ms-2">!</span>
                                         {% endif %}
                                     </div>
 
-                                    <div>
-                                        <button type="submit"
-                                                name="toggle_task"
-                                                value="{{ task.id }}"
-                                                class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}"
-                                                formnovalidate
-                                                aria-label="Toggle complete"
-                                                title="Mark complete">
-                                            ✓
-                                        </button>
-
-                                        <button type="submit"
-                                                name="delete_task"
-                                                value="{{ task.id }}"
-                                                class="btn btn-sm tickr-btn-outline-primary ms-2"
-                                                formnovalidate
-                                                aria-label="Delete task"
-                                                title="Delete">
-                                            ✕
-                                        </button>
-                                    </div>
+                                    <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %} rounded-pill ms-3">
+                                        {% if task.is_completed %}Done{% else %}To Do{% endif %}
+                                    </span>
 
                                 </li>
                             {% empty %}
@@ -85,6 +91,9 @@
 
         <!-- RIGHT COLUMN -->
         <div class="col-lg-5">
+
+            <form method="POST">
+                {% csrf_token %}
 
             <!-- FOCUS -->
             <div class="card shadow-sm mb-4 tickr-panel">
@@ -115,13 +124,19 @@
                 </div>
             </div>
 
-            <!-- Save button removed (user-linked lists next) -->
+            <div class="text-end mt-3">
+                <button type="submit"
+                        name="save"
+                        class="btn tickr-btn-accent px-4">
+                    Save
+                </button>
+            </div>
+
+            </form>
 
         </div>
 
     </div>
-
-    </form>
 </div>
 
 {% endblock %}

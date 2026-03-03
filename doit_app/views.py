@@ -20,6 +20,22 @@ def home(request):
 @login_required
 def todolist(request):
     if request.method == "POST":
+        if "save" in request.POST:
+            focus_content = request.POST.get("focus_content", "")
+            notes_content = request.POST.get("notes_content", "")
+
+            focus_text = focus_content.strip()
+            FocusItem.objects.filter(user=request.user).delete()
+            if focus_text:
+                FocusItem.objects.create(user=request.user, title=focus_text)
+
+            notes_text = notes_content.strip()
+            Note.objects.filter(user=request.user).delete()
+            if notes_text:
+                Note.objects.create(user=request.user, content=notes_text)
+
+            return redirect("todolist")
+
         if "toggle_task" in request.POST:
             try:
                 task_id = int(request.POST.get("toggle_task") or "")
