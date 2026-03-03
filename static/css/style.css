@@ -9,14 +9,13 @@
   --secondary: #91d7b2;
   --accent: #71aecb;
 }
-/* Font for headings */
+
 .nunito {
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
 
-/* Font for body */
 .work-sans {
   font-family: "Work Sans", sans-serif;
   font-optical-sizing: auto;

@@ -21,4 +21,5 @@ from doit_app import views as doit_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', doit_views.index, name='index'),
+    path('home/', doit_views.home, name='home'),
 ]

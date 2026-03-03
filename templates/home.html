@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doit Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <h1 class="hero-title">Tickr</h1>
+    <h2>Where plans become progress</h2>
+
+    <div class="hero-image">
+      <img src="{% static 'images/hero.png' %}" alt="Hero Image" />
+    </div>
+
+    <div class="hero-bullets">
+      <span>✔ Stay Focused</span>
+      <span>✔ Avoid Overcommitting</span>
+      <span>✔ Track Progress Automatically</span>
+      <span>✔ Plan Intentionally</span>
+    </div>
+
+    <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+  </body>
+</html>
