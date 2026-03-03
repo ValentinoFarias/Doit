@@ -139,10 +139,7 @@ a {
 
 /* Features */
 .features {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 50px 40px;
+  padding: 0;
 }
 
 .feature-card {
@@ -194,6 +191,27 @@ a {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+.team-footer {
+  max-width: 900px;
+}
+
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.team-icon {
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .footer-email {
