@@ -1,6 +1,9 @@
 # Doit
 
-# placeholder
+# wireframes
+Initial wireframes outlining the core structure, user flow of the platform and functionality of the application
+![desktop vision](README-images/desktop-wireframes.png)
+![mobile vision](README-images/mobile-wireframes.png)
 
 # placeholder
 
