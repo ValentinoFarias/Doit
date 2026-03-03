@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="row">
+
+        <!-- LEFT COLUMN - TO DO LIST -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <h4 class="mb-3">To Do List</h4>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Add New Task -->
+                        <div class="input-group mb-3">
+                            <input type="text"
+                                   name="new_task"
+                                   class="form-control"
+                                   placeholder="Add new task..."
+                                   required>
+                            <button class="btn btn-primary" type="submit" name="add_task">
+                                Add
+                            </button>
+                        </div>
+
+                        <!-- Task List -->
+                        <ul class="list-group">
+
+                            {% for task in tasks %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                                    <div>
+                                        <input type="checkbox"
+                                               name="completed_tasks"
+                                               value="{{ task.id }}"
+                                               {% if task.is_completed %}checked{% endif %}>
+
+                                        <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
+                                            {{ task.title }}
+                                        </span>
+
+                                        {% if task.due_date|date:"Y-m-d" == today %}
+                                            <span class="badge bg-danger ms-2">
+                                                !
+                                            </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div>
+                                        <a href="{% url 'delete_task' task.id %}"
+                                           class="btn btn-sm btn-outline-danger">
+                                            ✕
+                                        </a>
+                                    </div>
+
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item text-muted">
+                                    No tasks yet
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-5">
+
+            <!-- FOCUS -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+
+                    <h5 class="mb-3">Focus</h5>
+
+                    <textarea name="focus_content"
+                              class="form-control"
+                              rows="4"
+                              placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
+
+                </div>
+            </div>
+
+
+            <!-- NOTES -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h5 class="mb-3">Notes</h5>
+
+                    <textarea name="notes_content"
+                              class="form-control"
+                              rows="6"
+                              placeholder="Write your notes here...">{% for note in notes %}{{ note.content }}{% endfor %}</textarea>
+
+                </div>
+            </div>
+
+            <!-- SAVE BUTTON -->
+            <div class="text-end mt-3">
+                <button type="submit"
+                        formmethod="POST"
+                        class="btn btn-success px-4">
+                    Save
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
