@@ -28,5 +28,71 @@
     </div>
 
     <a href="#" class="btn btn-primary btn-lg">Get Started</a>
-  </body>
+ 
+
+<!--features -->
+
+<div class="row g-4">
+
+  <!-- Add Task -->
+  <div class="col-md-3">
+    <div class="card feature-card text-center p-4" onclick="openAddPreview()">
+      <div class="display-6">➕</div>
+      <h5 class="mt-3">Add Task</h5>
+      <p class="small">Quickly create a task for today.</p>
+    </div>
+  </div>
+
+  <!-- Edit Task -->
+  <div class="col-md-3">
+    <div class="card feature-card text-center p-4">
+      <div class="display-6">✏️</div>
+      <h5 class="mt-3">Edit Task</h5>
+      <p class="small">Modify priorities and durations anytime.</p>
+    </div>
+  </div>
+
+  <!-- Complete Task -->
+  <div class="col-md-3">
+    <div class="card feature-card text-center p-4" onclick="animateComplete()">
+      <div class="display-6" id="completeIcon">✅</div>
+      <h5 class="mt-3">Complete Task</h5>
+      <p class="small">Track progress with one click.</p>
+    </div>
+  </div>
+
+  <!-- Delete Task -->
+  <div class="col-md-3">
+    <div class="card feature-card text-center p-4">
+      <div class="display-6">🗑</div>
+      <h5 class="mt-3">Delete Task</h5>
+      <p class="small">Remove tasks instantly.</p>
+    </div>
+  </div>
+
+</div>
+
+<!--demo section-->
+<hr class="my-5">
+
+<div class="container">
+  <h3 class="mb-3">Live Demo</h3>
+
+  <!-- Progress Bar -->
+  <div class="progress mb-3" style="height: 25px;">
+    <div id="demoProgressBar"
+         class="progress-bar bg-success"
+         role="progressbar"
+         style="width: 0%;">
+      0% Completed
+    </div>
+  </div>
+
+  <!-- Task List -->
+  <div id="demoTaskList" class="list-group"></div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="{% static 'javascript/demo.js' %}"></script>
+ </body>
 </html>
