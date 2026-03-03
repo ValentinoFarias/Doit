@@ -5,6 +5,9 @@
 
 <div class="container py-4">
 
+    <form method="POST">
+        {% csrf_token %}
+
     <div class="row">
 
         <!-- LEFT COLUMN - TO DO LIST -->
@@ -13,9 +16,6 @@
                 <div class="card-body">
 
                     <h4 class="mb-3">To Do List</h4>
-
-                    <form method="POST">
-                        {% csrf_token %}
 
                         <!-- Add New Task -->
                         <div class="input-group mb-3">
@@ -36,11 +36,6 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
 
                                     <div>
-                                        <input type="checkbox"
-                                               name="completed_tasks"
-                                               value="{{ task.id }}"
-                                               {% if task.is_completed %}checked{% endif %}>
-
                                         <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
                                             {{ task.title }}
                                         </span>
@@ -53,10 +48,19 @@
                                     </div>
 
                                     <div>
-                                        <a href="{% url 'delete_task' task.id %}"
-                                           class="btn btn-sm btn-outline-danger">
+                                        <button type="submit"
+                                                name="toggle_task"
+                                                value="{{ task.id }}"
+                                                class="btn btn-sm {% if task.is_completed %}btn-success{% else %}btn-outline-success{% endif %}">
+                                            ✓
+                                        </button>
+
+                                        <button type="submit"
+                                                name="delete_task"
+                                                value="{{ task.id }}"
+                                                class="btn btn-sm btn-outline-danger ms-2">
                                             ✕
-                                        </a>
+                                        </button>
                                     </div>
 
                                 </li>
@@ -67,8 +71,6 @@
                             {% endfor %}
 
                         </ul>
-
-                    </form>
 
                 </div>
             </div>
@@ -110,7 +112,7 @@
             <!-- SAVE BUTTON -->
             <div class="text-end mt-3">
                 <button type="submit"
-                        formmethod="POST"
+                        name="save"
                         class="btn btn-success px-4">
                     Save
                 </button>
@@ -119,6 +121,8 @@
         </div>
 
     </div>
+
+    </form>
 </div>
 
 {% endblock %}
