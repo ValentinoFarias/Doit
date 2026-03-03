@@ -15,23 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-<<<<<<< HEAD
 from django.urls import include, path
-=======
-from django.urls import path, include
->>>>>>> 4a9de1277161c9948b1f91dfdcd29429fe6fa74a
 from doit_app import views as doit_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('register/', doit_views.register, name='register'),
     path('', doit_views.home, name='home'),
     path('index/', doit_views.index, name='index'),
-<<<<<<< HEAD
     path('todolist/', doit_views.todolist, name='todolist'),
     path('todolist/delete/<int:task_id>/', doit_views.delete_task, name='delete_task'),
-=======
-    path('register/', doit_views.register, name='register'),
-    path('accounts/', include('django.contrib.auth.urls')),
->>>>>>> nat
 ]
