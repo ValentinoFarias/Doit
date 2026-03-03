@@ -1,1 +1,1 @@
-web: gunicorn doit_app.wsgi
+web: gunicorn doit_project.wsgi
