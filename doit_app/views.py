@@ -9,3 +9,7 @@ def index(request):
 
 def home(request):
     return render(request, 'home.html')
+
+
+def todolist(request):
+    return render(request, 'todolist.html')
