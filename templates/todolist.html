@@ -39,6 +39,7 @@
                                 <button class="btn tickr-btn-accent" type="submit" name="add_task">Add</button>
                             </div>
                         </form>
+
                         <!-- Task List -->
                         <ul class="list-group">
                             {% for task in tasks %}
@@ -136,7 +137,7 @@
         <!-- RIGHT COLUMN -->
         <div class="col-lg-5">
 
-            <form method="POST">
+            <form method="POST" id="saveAllForm">
                 {% csrf_token %}
 
                 <!-- FOCUS -->
@@ -162,12 +163,65 @@
                 </div>
 
                 <div class="text-end mt-3">
-                    <button type="submit" name="save" class="btn tickr-btn-accent px-4">Save</button>
+                    <button type="button"
+                            id="openSaveListModal"
+                            class="btn tickr-btn-accent px-4"
+                            data-bs-toggle="modal"
+                            data-bs-target="#saveListModal">
+                        Save
+                    </button>
                 </div>
 
             </form>
         </div>
 
+    </div>
+</div>
+
+<div class="modal fade" id="saveListModal" tabindex="-1" aria-labelledby="saveListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="saveListModalLabel">Save Task List</h5>
+                <button type="button" id="closeSaveListModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="listName" class="form-label">List name</label>
+                    <input id="listName"
+                           type="text"
+                           name="list_name"
+                           class="form-control tickr-input"
+                           form="saveAllForm"
+                           required>
+                </div>
+                <div>
+                    <label for="listDueAt" class="form-label">List completion date</label>
+                    <input id="listDueAt"
+                           type="datetime-local"
+                           name="list_due_at"
+                           class="form-control tickr-input"
+                           form="saveAllForm"
+                           required>
+                </div>
+                <div class="mt-3">
+                    <label for="projectFolder" class="form-label">Project folder (optional)</label>
+                    <select id="projectFolder"
+                            name="project_folder_id"
+                            class="form-select tickr-input"
+                            form="saveAllForm">
+                        <option value="">No folder</option>
+                        {% for folder in project_folders %}
+                            <option value="{{ folder.id }}">{{ folder.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancelSaveListModal" class="btn tickr-btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" name="save_list" class="btn tickr-btn-primary" form="saveAllForm">Create List</button>
+            </div>
+        </div>
     </div>
 </div>
 

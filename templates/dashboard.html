@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="TickR">
+        </div>
+
+        <nav class="nav">
+            <a href="{% url 'dashboard' %}?filter=notifications" class="nav-item {% if active_filter == 'notifications' %}active{% endif %}">Notifications ({{ notification_count }})</a>
+            <a href="{% url 'dashboard' %}?filter=today" class="nav-item {% if active_filter == 'today' %}active{% endif %}">Today ({{ today_count }})</a>
+            <a href="{% url 'dashboard' %}?filter=upcoming" class="nav-item {% if active_filter == 'upcoming' %}active{% endif %}">Upcoming ({{ upcoming_count }})</a>
+            <a href="{% url 'dashboard' %}?filter=someday" class="nav-item {% if active_filter == 'someday' %}active{% endif %}">Someday ({{ someday_count }})</a>
+            <a href="{% url 'dashboard' %}?filter=completed" class="nav-item {% if active_filter == 'completed' %}active{% endif %}">Completed ({{ completed_count }})</a>
+
+            <div class="nav-section">Projects</div>
+            {% for folder in project_folders %}
+                <div class="project-folder-item">
+                    <a href="{% url 'dashboard' %}?filter={{ active_filter }}&project={{ folder.id }}"
+                       class="nav-item {% if active_project_id == folder.id %}active{% endif %}">
+                        {{ folder.name }} ({{ folder.saved_lists.count }})
+                    </a>
+
+                    <form method="POST" class="project-folder-inline-form">
+                        {% csrf_token %}
+                        <input type="text"
+                               name="project_folder_new_name"
+                               class="form-control form-control-sm"
+                               placeholder="Rename"
+                               required>
+                        <button type="submit"
+                                name="update_project_folder"
+                                value="{{ folder.id }}"
+                                class="btn btn-sm btn-outline-secondary">
+                            Update
+                        </button>
+                        <button type="submit"
+                                name="delete_project_folder"
+                                value="{{ folder.id }}"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Delete this project folder?');">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            {% empty %}
+                <div class="text-muted small mb-2">No project folders yet.</div>
+            {% endfor %}
+
+            <form method="POST" class="project-folder-create-form mt-2">
+                {% csrf_token %}
+                <input type="text"
+                       name="project_folder_name"
+                       class="form-control form-control-sm"
+                       placeholder="New project folder"
+                       required>
+                <button type="submit" name="create_project_folder" class="btn btn-sm tickr-btn-accent mt-2 w-100">
+                    Create Folder
+                </button>
+            </form>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <input type="text" placeholder="Search..." class="search" disabled>
+            <div class="user">
+                <div class="avatar"></div>
+                <span>{{ request.user.username }}</span>
+            </div>
+        </div>
+
+        <h1 class="page-title">My Saved Lists - {{ today|date:"F j, Y" }}</h1>
+
+        {% if notifications_due_today_count > 0 or outstanding_tasks_count > 0 %}
+            <div class="alert alert-warning" role="alert">
+                {% if notifications_due_today_count > 0 %}
+                    {{ notifications_due_today_count }} saved list{{ notifications_due_today_count|pluralize }} due today.
+                {% endif %}
+                {% if notifications_due_today_count > 0 and outstanding_tasks_count > 0 %}
+                    |
+                {% endif %}
+                {% if outstanding_tasks_count > 0 %}
+                    {{ outstanding_tasks_count }} outstanding to-do task{{ outstanding_tasks_count|pluralize }}.
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <section class="task-list">
+            {% for saved_list in saved_lists %}
+                <div class="task">
+                    <div class="task-left">
+                        <a href="{% url 'saved_list_detail' saved_list.id %}" class="task-title">{{ saved_list.name }}</a>
+                    </div>
+
+                    <div class="task-meta">
+                        <span class="date">Created: {{ saved_list.created_at|date:"M d, Y H:i" }}</span>
+                        <span class="badge {% if saved_list.completed_tasks == saved_list.total_tasks and saved_list.total_tasks > 0 %}high{% else %}medium{% endif %}">
+                            {{ saved_list.completed_tasks }}/{{ saved_list.total_tasks }} done
+                        </span>
+                        <span class="tag">Due: {{ saved_list.due_at|date:"M d, Y H:i" }}</span>
+
+                        <form method="POST" class="d-inline d-flex align-items-center gap-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="current_filter" value="{{ active_filter }}">
+                            <input type="hidden" name="current_project" value="{{ active_project_id }}">
+                            <select name="target_project_folder" class="form-select form-select-sm" aria-label="Move to folder">
+                                <option value="">No folder</option>
+                                {% for folder in project_folders %}
+                                    <option value="{{ folder.id }}" {% if saved_list.project_folder_id == folder.id %}selected{% endif %}>{{ folder.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" name="move_saved_list_folder" value="{{ saved_list.id }}" class="btn btn-sm btn-outline-secondary">Move</button>
+                        </form>
+
+                        <form method="POST" class="d-inline" onsubmit="return confirm('Delete this saved list?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="current_filter" value="{{ active_filter }}">
+                            <input type="hidden" name="current_project" value="{{ active_project_id }}">
+                            <button type="submit"
+                                    name="delete_saved_list"
+                                    value="{{ saved_list.id }}"
+                                    class="btn btn-sm btn-outline-danger"
+                                    aria-label="Delete saved list"
+                                    title="Delete saved list">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="task">
+                    <div class="task-left">
+                        <span class="task-title">No saved lists yet. Create one from Task List using "Save List".</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+
+    </main>
+
+</div>
+{% endblock content %}

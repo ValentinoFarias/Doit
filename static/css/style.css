@@ -8,6 +8,7 @@
   --primary: #be5f54;
   --secondary: #91d7b2;
   --accent: #71aecb;
+  --brand-logo-height: 72px;
 }
 
 .nunito {
@@ -79,9 +80,14 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: var(--brand-logo-height);
   padding: 16px 40px;
   background-color: var(--background);
   border-bottom: 1px solid #e0d9d7;
+}
+
+.navbar .container-fluid {
+  min-height: var(--brand-logo-height);
 }
 
 .nav-links {
@@ -92,6 +98,20 @@ a {
 
 .nav-links a:hover {
   color: var(--primary);
+}
+
+.navbar-brand {
+  height: var(--brand-logo-height);
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar-logo {
+  height: var(--brand-logo-height);
+  width: auto;
+  display: block;
 }
 
 .nav-actions {
@@ -109,6 +129,14 @@ a {
 .hero-title {
   font-size: 2.8rem;
   color: var(--text);
+}
+
+.home-logo {
+  height: var(--brand-logo-height);
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: 0 auto 12px;
 }
 
 .hero-subtitle {
