@@ -1,13 +1,32 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <div class="container py-4">
-        <div class="row">
-            <!-- LEFT COLUMN - TO DO LIST -->
-            <div class="col-lg-7 mb-4">
-                <div class="card shadow-sm h-100 tickr-panel">
-                    <div class="card-body">
-                        <h4 class="mb-3">To Do List</h4>
+
+<div class="container py-4">
+
+    <div class="row">
+
+        <!-- LEFT COLUMN - TO DO LIST -->
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm h-100 tickr-panel">
+                <div class="card-body">
+
+                    <h4 class="mb-3">To Do List</h4>
+
+                        <div class="progress mb-3" style="height: 30px;">
+                            <div id="todoProgressBar"
+                                 class="progress-bar {% if progress_percent == 100 and total_tasks > 0 %}bg-success{% else %}bg-primary{% endif %}"
+                                 role="progressbar"
+                                 style="width: {{ progress_percent }}%;"
+                                 aria-valuenow="{{ progress_percent }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 data-progress="{{ progress_percent }}"
+                                 data-total="{{ total_tasks }}">
+                                {{ progress_percent }}% Completed
+                            </div>
+                        </div>
+
                         <!-- Add New Task -->
                         <form method="POST" class="mb-3">
                             {% csrf_token %}
@@ -36,56 +55,101 @@
                                                 ✓
                                             </button>
                                         </form>
-                                        <!-- Delete Task -->
-                                        <form method="POST" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit"
-                                                    name="delete_task"
-                                                    value="{{ task.id }}"
-                                                    class="btn btn-sm tickr-btn-outline-primary">✕</button>
-                                        </form>
-                                        {% if task.id == editing_task_id %}
-                                            <!-- Editing mode: input + save -->
-                                            <form method="POST" class="d-flex align-items-center gap-2 flex-grow-1">
-                                                {% csrf_token %}
-                                                <input type="text"
-                                                       name="edit_task_title"
-                                                       value="{{ task.title }}"
-                                                       class="form-control form-control-sm flex-grow-1">
-                                                <button type="submit"
-                                                        name="edit_task"
-                                                        value="{{ task.id }}"
-                                                        class="btn btn-sm tickr-btn-outline-warning">💾</button>
-                                            </form>
-                                        {% else %}
-                                            <!-- Task title and edit button -->
+                                    </div>
+
+                                    <div class="flex-grow-1">
+                                        {% if edit_task_id == task.id %}
                                             <form method="POST" class="d-flex align-items-center gap-2">
                                                 {% csrf_token %}
-                                                <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">{{ task.title }}</span>
+                                                <input type="text"
+                                                       name="edited_task_title"
+                                                       class="form-control form-control-sm tickr-input"
+                                                       value="{{ task.title }}"
+                                                       required>
                                                 <button type="submit"
-                                                        name="start_edit"
+                                                        name="update_task"
                                                         value="{{ task.id }}"
-                                                        class="btn btn-sm tickr-btn-outline-secondary ms-2">✎</button>
+                                                        class="btn btn-sm tickr-btn-accent"
+                                                        aria-label="Save task"
+                                                        title="Save">
+                                                    Save
+                                                </button>
+                                                <a href="{% url 'todolist' %}"
+                                                   class="btn btn-sm tickr-btn-outline-secondary"
+                                                   aria-label="Cancel edit"
+                                                   title="Cancel">
+                                                    Cancel
+                                                </a>
                                             </form>
+                                        {% else %}
+                                            <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
+                                                {{ task.title }}
+                                            </span>
+
+                                            {% if task.due_date|date:"Y-m-d" == today %}
+                                                <span class="badge tickr-badge-alert ms-2">!</span>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
-                                    <!-- RIGHT SIDE: Badges -->
-                                    <div class="d-flex align-items-center gap-1">
-                                        {% if task.due_date|date:"Y-m-d" == today %}<span class="badge tickr-badge-alert">!</span>{% endif %}
-                                        <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %}">
-                                            {% if task.is_completed %}
-                                                Done
-                                            {% else %}
-                                                To Do
-                                            {% endif %}
-                                        </span>
-                                    </div>
-                                {% empty %}
-                                    <li class="list-group-item text-muted">No tasks yet</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
+
+                                    <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %} rounded-pill ms-3">
+                                        {% if task.is_completed %}Done{% else %}To Do{% endif %}
+                                    </span>
+
+                                    {% if edit_task_id != task.id %}
+                                        <div class="d-flex align-items-center gap-2 ms-3">
+                                            <a href="{% url 'todolist' %}?edit={{ task.id }}"
+                                               class="btn btn-sm tickr-btn-outline-secondary"
+                                               aria-label="Edit task"
+                                               title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <form method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        name="delete_task"
+                                                        value="{{ task.id }}"
+                                                        class="btn btn-sm tickr-btn-outline-primary"
+                                                        aria-label="Delete task"
+                                                        title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item text-muted">
+                                    No tasks yet
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-5">
+
+            <form method="POST">
+                {% csrf_token %}
+
+            <!-- FOCUS -->
+            <div class="card shadow-sm mb-4 tickr-panel">
+                <div class="card-body">
+
+                    <h5 class="mb-3">Focus</h5>
+
+                    <textarea name="focus_content"
+                              class="form-control tickr-input"
+                              rows="4"
+                              placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
+
                 </div>
                 <!-- RIGHT COLUMN -->
                 <div class="col-lg-5">
@@ -118,4 +182,13 @@
                 </div>
             </div>
         </div>
-    {% endblock %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="{% static 'javascript/todolist.js' %}"></script>
+{% endblock scripts %}

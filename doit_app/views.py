@@ -19,7 +19,8 @@ def home(request):
 
 @login_required
 def todolist(request):
-    editing_task_id = None
+    edit_task_id = None
+
     if request.method == "POST":
         if "save" in request.POST:
             focus_content = request.POST.get("focus_content", "")
@@ -64,35 +65,45 @@ def todolist(request):
                 Task.objects.create(title=title, user=request.user)
             return redirect("todolist")
 
-        if "start_edit" in request.POST:
+        if "update_task" in request.POST:
             try:
-                editing_task_id = int(request.POST.get("start_edit") or "")
+                task_id = int(request.POST.get("update_task") or "")
             except (TypeError, ValueError):
                 return redirect("todolist")
 
-        if "edit_task" in request.POST:
-            try:
-                task_id = int(request.POST.get("edit_task") or "")
-            except (TypeError, ValueError):
-                return redirect("todolist")
-
+            title = (request.POST.get("edited_task_title") or "").strip()
             task = get_object_or_404(Task, id=task_id, user=request.user)
-            new_title = (request.POST.get("edit_task_title") or "").strip()
-            if new_title:
-                task.title = new_title
+            if title:
+                task.title = title
                 task.save(update_fields=["title", "updated_at"])
             return redirect("todolist")
+
+    raw_edit_task_id = request.GET.get("edit")
+    if raw_edit_task_id:
+        try:
+            parsed_edit_task_id = int(raw_edit_task_id)
+        except (TypeError, ValueError):
+            parsed_edit_task_id = None
+
+        if parsed_edit_task_id and Task.objects.filter(id=parsed_edit_task_id, user=request.user).exists():
+            edit_task_id = parsed_edit_task_id
 
     tasks = Task.objects.filter(user=request.user)
     focus_items = FocusItem.objects.filter(user=request.user)
     notes = Note.objects.filter(user=request.user)
+    total_tasks = tasks.count()
+    completed_tasks = tasks.filter(is_completed=True).count()
+    progress_percent = round((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
     context = {
         "tasks": tasks,
         "focus_items": focus_items,
         "notes": notes,
         "today": timezone.localdate().strftime("%Y-%m-%d"),
-        "editing_task_id": editing_task_id,
+        "edit_task_id": edit_task_id,
+        "total_tasks": total_tasks,
+        "completed_tasks": completed_tasks,
+        "progress_percent": progress_percent,
     }
     return render(request, "todolist.html", context)
 
