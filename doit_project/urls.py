@@ -25,5 +25,7 @@ urlpatterns = [
     path('', doit_views.home, name='home'),
     path('index/', doit_views.index, name='index'),
     path('todolist/', doit_views.todolist, name='todolist'),
+    path('dashboard/', doit_views.dashboard, name='dashboard'),
+    path('dashboard/list/<int:list_id>/', doit_views.saved_list_detail, name='saved_list_detail'),
     # path('todolist/delete/<int:task_id>/', doit_views.delete_task, name='delete_task'),
 ]

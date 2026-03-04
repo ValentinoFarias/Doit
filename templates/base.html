@@ -1,5 +1,6 @@
 {% url 'home' as home_url %}
 {% url 'todolist' as task_list_url %}
+{% url 'dashboard' as dashboard_url %}
 {% url 'login' as login_url %}
 {% url 'register' as signup_url %}
 {% url 'logout' as logout_url %}
@@ -40,7 +41,9 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{{ home_url }}">TickR</a>
+        <a class="navbar-brand" href="{{ home_url }}">
+          <img src="{% static 'images/logo.png' %}" alt="TickR" class="navbar-logo" />
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -71,10 +74,9 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link disabled"
-                href="#"
-                aria-disabled="true"
-                >Dashboard (soon)</a
+                class="nav-link {% if request.path == dashboard_url %}active{% endif %}"
+                href="{{ dashboard_url }}"
+                >Dashboard</a
               >
             </li>
             {% if user.is_authenticated %}

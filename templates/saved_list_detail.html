@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">{{ saved_list.name }}</h3>
+        <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="mb-3 text-muted">
+        <span class="me-3">Created: {{ saved_list.created_at|date:"M d, Y H:i" }}</span>
+        <span>Due: {{ saved_list.due_at|date:"M d, Y H:i" }}</span>
+    </div>
+
+    {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm h-100 tickr-panel">
+                <div class="card-body">
+
+                    <h4 class="mb-3">To Do List</h4>
+
+                    <div class="progress mb-3" style="height: 30px;">
+                        <div id="todoProgressBar"
+                             class="progress-bar {% if progress_percent == 100 and total_tasks > 0 %}bg-success{% else %}bg-primary{% endif %}"
+                             role="progressbar"
+                             style="width: {{ progress_percent }}%;"
+                             aria-valuenow="{{ progress_percent }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             data-progress="{{ progress_percent }}"
+                             data-total="{{ total_tasks }}">
+                            {{ progress_percent }}% Completed
+                        </div>
+                    </div>
+
+                    <form method="POST" class="mb-3">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text"
+                                   name="new_task"
+                                   class="form-control tickr-input"
+                                   placeholder="Add new task..."
+                                   required>
+                            <button class="btn tickr-btn-accent" type="submit" name="add_saved_task">Add</button>
+                        </div>
+                    </form>
+
+                    <ul class="list-group">
+                        {% for task in tasks %}
+                            <li class="list-group-item d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center flex-grow-1 gap-2">
+                                    <form method="POST" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                name="toggle_saved_task"
+                                                value="{{ task.id }}"
+                                                class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}">
+                                            ✓
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="flex-grow-1">
+                                    {% if edit_task_id == task.id %}
+                                        <form method="POST" class="d-flex align-items-center gap-2">
+                                            {% csrf_token %}
+                                            <input type="text"
+                                                   name="edited_task_title"
+                                                   class="form-control form-control-sm tickr-input"
+                                                   value="{{ task.title }}"
+                                                   required>
+                                            <button type="submit"
+                                                    name="update_saved_task"
+                                                    value="{{ task.id }}"
+                                                    class="btn btn-sm tickr-btn-accent">
+                                                Save
+                                            </button>
+                                            <a href="{% url 'saved_list_detail' saved_list.id %}"
+                                               class="btn btn-sm tickr-btn-outline-secondary">
+                                                Cancel
+                                            </a>
+                                        </form>
+                                    {% else %}
+                                        <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
+                                            {{ task.title }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %} rounded-pill ms-3">
+                                    {% if task.is_completed %}Done{% else %}To Do{% endif %}
+                                </span>
+
+                                {% if edit_task_id != task.id %}
+                                    <div class="d-flex align-items-center gap-2 ms-3">
+                                        <a href="{% url 'saved_list_detail' saved_list.id %}?edit={{ task.id }}"
+                                           class="btn btn-sm tickr-btn-outline-secondary"
+                                           aria-label="Edit task"
+                                           title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <form method="POST" class="d-inline" onsubmit="return confirm('Delete this task?');">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                    name="delete_saved_task"
+                                                    value="{{ task.id }}"
+                                                    class="btn btn-sm tickr-btn-outline-primary"
+                                                    aria-label="Delete task"
+                                                    title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item text-muted">No tasks in this saved list.</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="card shadow-sm mb-4 tickr-panel">
+                    <div class="card-body">
+                        <h5 class="mb-3">Focus</h5>
+                        <textarea name="focus_content"
+                                  class="form-control tickr-input"
+                                  rows="4"
+                                  placeholder="What are you focusing on today?">{{ saved_list.focus_content }}</textarea>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm tickr-panel">
+                    <div class="card-body">
+                        <h5 class="mb-3">Notes</h5>
+                        <textarea name="notes_content"
+                                  class="form-control tickr-input"
+                                  rows="6"
+                                  placeholder="Write your notes here...">{{ saved_list.notes_content }}</textarea>
+                    </div>
+                </div>
+
+                <div class="text-end mt-3">
+                    <button type="submit" name="update_saved_list" class="btn tickr-btn-accent px-4">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="{% static 'javascript/todolist.js' %}"></script>
+{% endblock scripts %}
