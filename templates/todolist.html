@@ -139,48 +139,33 @@
             <form method="POST">
                 {% csrf_token %}
 
-            <!-- FOCUS -->
-            <div class="card shadow-sm mb-4 tickr-panel">
-                <div class="card-body">
-
-                    <h5 class="mb-3">Focus</h5>
-
-                    <textarea name="focus_content"
-                              class="form-control tickr-input"
-                              rows="4"
-                              placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
-
+                <!-- FOCUS -->
+                <div class="card shadow-sm mb-4 tickr-panel">
+                    <div class="card-body">
+                        <h5 class="mb-3">Focus</h5>
+                        <textarea name="focus_content"
+                                  class="form-control tickr-input"
+                                  rows="4"
+                                  placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
+                    </div>
                 </div>
-                <!-- RIGHT COLUMN -->
-                <div class="col-lg-5">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <!-- FOCUS -->
-                        <div class="card shadow-sm mb-4 tickr-panel">
-                            <div class="card-body">
-                                <h5 class="mb-3">Focus</h5>
-                                <textarea name="focus_content"
-                                          class="form-control tickr-input"
-                                          rows="4"
-                                          placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
-                            </div>
-                        </div>
-                        <!-- NOTES -->
-                        <div class="card shadow-sm tickr-panel">
-                            <div class="card-body">
-                                <h5 class="mb-3">Notes</h5>
-                                <textarea name="notes_content"
-                                          class="form-control tickr-input"
-                                          rows="6"
-                                          placeholder="Write your notes here...">{% for note in notes %}{{ note.content }}{% endfor %}</textarea>
-                            </div>
-                        </div>
-                        <div class="text-end mt-3">
-                            <button type="submit" name="save" class="btn tickr-btn-accent px-4">Save</button>
-                        </div>
-                    </form>
+
+                <!-- NOTES -->
+                <div class="card shadow-sm tickr-panel">
+                    <div class="card-body">
+                        <h5 class="mb-3">Notes</h5>
+                        <textarea name="notes_content"
+                                  class="form-control tickr-input"
+                                  rows="6"
+                                  placeholder="Write your notes here...">{% for note in notes %}{{ note.content }}{% endfor %}</textarea>
+                    </div>
                 </div>
-            </div>
+
+                <div class="text-end mt-3">
+                    <button type="submit" name="save" class="btn tickr-btn-accent px-4">Save</button>
+                </div>
+
+            </form>
         </div>
 
     </div>
