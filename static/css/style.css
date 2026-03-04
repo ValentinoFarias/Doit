@@ -139,10 +139,7 @@ a {
 
 /* Features */
 .features {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 50px 40px;
+  padding: 0;
 }
 
 .feature-card {
@@ -196,6 +193,27 @@ a {
   gap: 20px;
 }
 
+.team-footer {
+  max-width: 900px;
+}
+
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.team-icon {
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 .footer-email {
   padding: 10px 16px;
   border: 1px solid #ccc;
@@ -237,4 +255,57 @@ a {
 .feature-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* For todolist.html app */
+
+.tickr-panel {
+  background-color: #ffffff;
+  border: 1px solid #e0d9d7;
+  border-radius: 10px;
+}
+
+.tickr-list-item {
+  background-color: #ffffff;
+  border-color: #e0d9d7;
+  color: var(--text);
+}
+
+.tickr-input {
+  border: 1px solid #e0d9d7;
+}
+
+.tickr-btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+  border: 2px solid var(--primary);
+}
+
+.tickr-btn-outline-primary {
+  background-color: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.tickr-btn-secondary {
+  background-color: var(--secondary);
+  color: #0a0a0a;
+  border: 2px solid var(--secondary);
+}
+
+.tickr-btn-outline-secondary {
+  background-color: transparent;
+  color: var(--secondary);
+  border: 2px solid var(--secondary);
+}
+
+.tickr-btn-accent {
+  background-color: var(--accent);
+  color: #0a0a0a;
+  border: 2px solid var(--accent);
+}
+
+.tickr-badge-alert {
+  background-color: var(--primary);
+  color: #ffffff;
 }

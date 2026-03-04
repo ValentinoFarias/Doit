@@ -1,9 +1,8 @@
 {% url 'home' as home_url %}
-{% url 'task_list' as task_list_url %}
-{% url 'dashboard' as dashboard_url %}
-{% url 'account_login' as login_url %}
-{% url 'account_signup' as signup_url %}
-{% url 'account_logout' as logout_url %}
+{% url 'todolist' as task_list_url %}
+{% url 'login' as login_url %}
+{% url 'register' as signup_url %}
+{% url 'logout' as logout_url %}
 {% load static %}
 <!doctype html>
 <html class="h-100" lang="en">
@@ -27,13 +26,17 @@
     <!-- Custom css  -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <!-- Favicon  -->
-    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}" />
+    
   </head>
   <body class="d-flex flex-column h-100 main-bg">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">TickR</a>
+        <a class="navbar-brand" href="{{ home_url }}">TickR</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -51,47 +54,48 @@
               <a
                 class="nav-link {% if request.path == home_url %}active{% endif %}"
                 aria-current="page"
-                href="#"
+                href="{% url 'home' %}"
                 >Home</a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == home_url %}active{% endif %}"
-                href="#"
+                class="nav-link {% if request.path == task_list_url %}active{% endif %}"
+                href="{{ task_list_url }}"
                 >Task List</a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == home_url %}active{% endif %}"
+                class="nav-link disabled"
                 href="#"
-                >Dashboard</a
+                aria-disabled="true"
+                >Dashboard (soon)</a
               >
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == logout_url %}active"
-                aria-current="page{% endif %}"
-                {% comment %} href="{% url 'account_logout' %}" {% endcomment %}
+                class="nav-link {% if request.path == logout_url %}active{% endif %}"
+                aria-current="page"
+                href="{% url 'logout' %}"
                 >Logout</a
               >
             </li>
             {% else %}
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == signup_url %}active"
-                aria-current="page{% endif %}"
-                {% comment %} href="{% url 'account_signup' %}" {% endcomment %}
+                class="nav-link {% if request.path == signup_url %}active{% endif %}"
+                aria-current="page"
+                href="{% url 'register' %}"
                 >Register</a
               >
             </li>
             <li class="nav-item">
               <a
-                class="nav-link {% if request.path == login_url %}active"
-                aria-current="page{% endif %}"
-                {% comment %} href="{% url 'account_login' %}" {% endcomment %}
+                class="nav-link {% if request.path == login_url %}active{% endif %}"
+                aria-current="page"
+                href="{% url 'login' %}"
                 >Login</a
               >
             </li>
@@ -114,13 +118,44 @@
     </main>
     <!-- Footer -->
     <footer class="footer mt-auto py-4 border-top">
-      <div class="container-fluid">
-        <div class="row align-items-center">
-          <div class="col-md-6 text-md-start text-center">
-            <span>TickR</span>
+      <div class="container team-footer">
+        <h5 class="mb-3 text-center">Team X</h5>
+        <div class="row g-3 justify-content-center text-center">
+          <div class="col-6 col-md-3">
+            <div class="team-member">
+              <i class="fas fa-user-circle team-icon"></i>
+              <div class="team-name">Giovanni</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="team-member">
+              <i class="fas fa-code team-icon"></i>
+              <div class="team-name">Andre</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="team-member">
+              <i class="fas fa-lightbulb team-icon"></i>
+              <div class="team-name">Valentino</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="team-member">
+              <i class="fas fa-star team-icon"></i>
+              <div class="team-name">Nathalie</div>
+            </div>
           </div>
         </div>
       </div>
     </footer>
+    <!-- Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    {% block scripts %}
+    <!-- Page-specific scripts go here -->
+    {% endblock scripts %}
   </body>
 </html>
