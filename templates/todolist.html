@@ -47,33 +47,69 @@
                                                 ✓
                                             </button>
                                         </form>
-
-                                        <form method="POST" class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit"
-                                                    name="delete_task"
-                                                    value="{{ task.id }}"
-                                                    class="btn btn-sm tickr-btn-outline-primary"
-                                                    aria-label="Delete task"
-                                                    title="Delete">
-                                                ✕
-                                            </button>
-                                        </form>
                                     </div>
 
                                     <div class="flex-grow-1">
-                                        <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
-                                            {{ task.title }}
-                                        </span>
+                                        {% if edit_task_id == task.id %}
+                                            <form method="POST" class="d-flex align-items-center gap-2">
+                                                {% csrf_token %}
+                                                <input type="text"
+                                                       name="edited_task_title"
+                                                       class="form-control form-control-sm tickr-input"
+                                                       value="{{ task.title }}"
+                                                       required>
+                                                <button type="submit"
+                                                        name="update_task"
+                                                        value="{{ task.id }}"
+                                                        class="btn btn-sm tickr-btn-accent"
+                                                        aria-label="Save task"
+                                                        title="Save">
+                                                    Save
+                                                </button>
+                                                <a href="{% url 'todolist' %}"
+                                                   class="btn btn-sm tickr-btn-outline-secondary"
+                                                   aria-label="Cancel edit"
+                                                   title="Cancel">
+                                                    Cancel
+                                                </a>
+                                            </form>
+                                        {% else %}
+                                            <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
+                                                {{ task.title }}
+                                            </span>
 
-                                        {% if task.due_date|date:"Y-m-d" == today %}
-                                            <span class="badge tickr-badge-alert ms-2">!</span>
+                                            {% if task.due_date|date:"Y-m-d" == today %}
+                                                <span class="badge tickr-badge-alert ms-2">!</span>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
 
                                     <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %} rounded-pill ms-3">
                                         {% if task.is_completed %}Done{% else %}To Do{% endif %}
                                     </span>
+
+                                    {% if edit_task_id != task.id %}
+                                        <div class="d-flex align-items-center gap-2 ms-3">
+                                            <a href="{% url 'todolist' %}?edit={{ task.id }}"
+                                               class="btn btn-sm tickr-btn-outline-secondary"
+                                               aria-label="Edit task"
+                                               title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <form method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        name="delete_task"
+                                                        value="{{ task.id }}"
+                                                        class="btn btn-sm tickr-btn-outline-primary"
+                                                        aria-label="Delete task"
+                                                        title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
 
                                 </li>
                             {% empty %}

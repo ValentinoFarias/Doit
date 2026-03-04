@@ -19,6 +19,8 @@ def home(request):
 
 @login_required
 def todolist(request):
+    edit_task_id = None
+
     if request.method == "POST":
         if "save" in request.POST:
             focus_content = request.POST.get("focus_content", "")
@@ -63,6 +65,29 @@ def todolist(request):
                 Task.objects.create(title=title, user=request.user)
             return redirect("todolist")
 
+        if "update_task" in request.POST:
+            try:
+                task_id = int(request.POST.get("update_task") or "")
+            except (TypeError, ValueError):
+                return redirect("todolist")
+
+            title = (request.POST.get("edited_task_title") or "").strip()
+            task = get_object_or_404(Task, id=task_id, user=request.user)
+            if title:
+                task.title = title
+                task.save(update_fields=["title", "updated_at"])
+            return redirect("todolist")
+
+    raw_edit_task_id = request.GET.get("edit")
+    if raw_edit_task_id:
+        try:
+            parsed_edit_task_id = int(raw_edit_task_id)
+        except (TypeError, ValueError):
+            parsed_edit_task_id = None
+
+        if parsed_edit_task_id and Task.objects.filter(id=parsed_edit_task_id, user=request.user).exists():
+            edit_task_id = parsed_edit_task_id
+
     tasks = Task.objects.filter(user=request.user)
     focus_items = FocusItem.objects.filter(user=request.user)
     notes = Note.objects.filter(user=request.user)
@@ -72,6 +97,7 @@ def todolist(request):
         "focus_items": focus_items,
         "notes": notes,
         "today": timezone.localdate().strftime("%Y-%m-%d"),
+        "edit_task_id": edit_task_id,
     }
     return render(request, "todolist.html", context)
 
