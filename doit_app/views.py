@@ -19,6 +19,7 @@ def home(request):
 
 @login_required
 def todolist(request):
+    editing_task_id = None
     if request.method == "POST":
         if "save" in request.POST:
             focus_content = request.POST.get("focus_content", "")
@@ -63,6 +64,25 @@ def todolist(request):
                 Task.objects.create(title=title, user=request.user)
             return redirect("todolist")
 
+        if "start_edit" in request.POST:
+            try:
+                editing_task_id = int(request.POST.get("start_edit") or "")
+            except (TypeError, ValueError):
+                return redirect("todolist")
+
+        if "edit_task" in request.POST:
+            try:
+                task_id = int(request.POST.get("edit_task") or "")
+            except (TypeError, ValueError):
+                return redirect("todolist")
+
+            task = get_object_or_404(Task, id=task_id, user=request.user)
+            new_title = (request.POST.get("edit_task_title") or "").strip()
+            if new_title:
+                task.title = new_title
+                task.save(update_fields=["title", "updated_at"])
+            return redirect("todolist")
+
     tasks = Task.objects.filter(user=request.user)
     focus_items = FocusItem.objects.filter(user=request.user)
     notes = Note.objects.filter(user=request.user)
@@ -72,15 +92,9 @@ def todolist(request):
         "focus_items": focus_items,
         "notes": notes,
         "today": timezone.localdate().strftime("%Y-%m-%d"),
+        "editing_task_id": editing_task_id,
     }
     return render(request, "todolist.html", context)
-
-
-@login_required
-def delete_task(request, task_id: int):
-    task = get_object_or_404(Task, id=task_id, user=request.user)
-    task.delete()
-    return redirect("todolist")
 
 
 def register(request):

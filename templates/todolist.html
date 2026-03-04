@@ -1,19 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-
-<div class="container py-4">
-
-    <div class="row">
-
-        <!-- LEFT COLUMN - TO DO LIST -->
-        <div class="col-lg-7 mb-4">
-            <div class="card shadow-sm h-100 tickr-panel">
-                <div class="card-body">
-
-                    <h4 class="mb-3">To Do List</h4>
-
+    <div class="container py-4">
+        <div class="row">
+            <!-- LEFT COLUMN - TO DO LIST -->
+            <div class="col-lg-7 mb-4">
+                <div class="card shadow-sm h-100 tickr-panel">
+                    <div class="card-body">
+                        <h4 class="mb-3">To Do List</h4>
                         <!-- Add New Task -->
                         <form method="POST" class="mb-3">
                             {% csrf_token %}
@@ -23,120 +17,105 @@
                                        class="form-control tickr-input"
                                        placeholder="Add new task..."
                                        required>
-                                <button class="btn tickr-btn-accent" type="submit" name="add_task">
-                                    Add
-                                </button>
+                                <button class="btn tickr-btn-accent" type="submit" name="add_task">Add</button>
                             </div>
                         </form>
-
                         <!-- Task List -->
                         <ul class="list-group">
-
                             {% for task in tasks %}
-                                <li class="list-group-item d-flex align-items-center tickr-list-item">
-
-                                    <div class="d-flex align-items-center gap-2 me-3">
+                                <li class="list-group-item d-flex align-items-center justify-content-between">
+                                    <!-- LEFT SIDE: Toggle, Delete, Edit/Input -->
+                                    <div class="d-flex align-items-center flex-grow-1 gap-2">
+                                        <!-- Toggle Complete -->
                                         <form method="POST" class="d-inline">
                                             {% csrf_token %}
                                             <button type="submit"
                                                     name="toggle_task"
                                                     value="{{ task.id }}"
-                                                    class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}"
-                                                    aria-label="Toggle complete"
-                                                    title="Mark complete">
+                                                    class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}">
                                                 ✓
                                             </button>
                                         </form>
-
+                                        <!-- Delete Task -->
                                         <form method="POST" class="d-inline">
                                             {% csrf_token %}
                                             <button type="submit"
                                                     name="delete_task"
                                                     value="{{ task.id }}"
-                                                    class="btn btn-sm tickr-btn-outline-primary"
-                                                    aria-label="Delete task"
-                                                    title="Delete">
-                                                ✕
-                                            </button>
+                                                    class="btn btn-sm tickr-btn-outline-primary">✕</button>
                                         </form>
-                                    </div>
-
-                                    <div class="flex-grow-1">
-                                        <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">
-                                            {{ task.title }}
-                                        </span>
-
-                                        {% if task.due_date|date:"Y-m-d" == today %}
-                                            <span class="badge tickr-badge-alert ms-2">!</span>
+                                        {% if task.id == editing_task_id %}
+                                            <!-- Editing mode: input + save -->
+                                            <form method="POST" class="d-flex align-items-center gap-2 flex-grow-1">
+                                                {% csrf_token %}
+                                                <input type="text"
+                                                       name="edit_task_title"
+                                                       value="{{ task.title }}"
+                                                       class="form-control form-control-sm flex-grow-1">
+                                                <button type="submit"
+                                                        name="edit_task"
+                                                        value="{{ task.id }}"
+                                                        class="btn btn-sm tickr-btn-outline-warning">💾</button>
+                                            </form>
+                                        {% else %}
+                                            <!-- Task title and edit button -->
+                                            <form method="POST" class="d-flex align-items-center gap-2">
+                                                {% csrf_token %}
+                                                <span class="{% if task.is_completed %}text-decoration-line-through text-muted{% endif %}">{{ task.title }}</span>
+                                                <button type="submit"
+                                                        name="start_edit"
+                                                        value="{{ task.id }}"
+                                                        class="btn btn-sm tickr-btn-outline-secondary ms-2">✎</button>
+                                            </form>
                                         {% endif %}
                                     </div>
-
-                                    <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %} rounded-pill ms-3">
-                                        {% if task.is_completed %}Done{% else %}To Do{% endif %}
-                                    </span>
-
-                                </li>
-                            {% empty %}
-                                <li class="list-group-item text-muted">
-                                    No tasks yet
-                                </li>
-                            {% endfor %}
-
-                        </ul>
-
+                                    <!-- RIGHT SIDE: Badges -->
+                                    <div class="d-flex align-items-center gap-1">
+                                        {% if task.due_date|date:"Y-m-d" == today %}<span class="badge tickr-badge-alert">!</span>{% endif %}
+                                        <span class="badge {% if task.is_completed %}bg-success{% else %}bg-secondary{% endif %}">
+                                            {% if task.is_completed %}
+                                                Done
+                                            {% else %}
+                                                To Do
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% empty %}
+                                    <li class="list-group-item text-muted">No tasks yet</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- RIGHT COLUMN -->
+                <div class="col-lg-5">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- FOCUS -->
+                        <div class="card shadow-sm mb-4 tickr-panel">
+                            <div class="card-body">
+                                <h5 class="mb-3">Focus</h5>
+                                <textarea name="focus_content"
+                                          class="form-control tickr-input"
+                                          rows="4"
+                                          placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
+                            </div>
+                        </div>
+                        <!-- NOTES -->
+                        <div class="card shadow-sm tickr-panel">
+                            <div class="card-body">
+                                <h5 class="mb-3">Notes</h5>
+                                <textarea name="notes_content"
+                                          class="form-control tickr-input"
+                                          rows="6"
+                                          placeholder="Write your notes here...">{% for note in notes %}{{ note.content }}{% endfor %}</textarea>
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button type="submit" name="save" class="btn tickr-btn-accent px-4">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-
-        <!-- RIGHT COLUMN -->
-        <div class="col-lg-5">
-
-            <form method="POST">
-                {% csrf_token %}
-
-            <!-- FOCUS -->
-            <div class="card shadow-sm mb-4 tickr-panel">
-                <div class="card-body">
-
-                    <h5 class="mb-3">Focus</h5>
-
-                    <textarea name="focus_content"
-                              class="form-control tickr-input"
-                              rows="4"
-                              placeholder="What are you focusing on today?">{% for item in focus_items %}{{ item.title }}{% endfor %}</textarea>
-
-                </div>
-            </div>
-
-
-            <!-- NOTES -->
-            <div class="card shadow-sm tickr-panel">
-                <div class="card-body">
-
-                    <h5 class="mb-3">Notes</h5>
-
-                    <textarea name="notes_content"
-                              class="form-control tickr-input"
-                              rows="6"
-                              placeholder="Write your notes here...">{% for note in notes %}{{ note.content }}{% endfor %}</textarea>
-
-                </div>
-            </div>
-
-            <div class="text-end mt-3">
-                <button type="submit"
-                        name="save"
-                        class="btn tickr-btn-accent px-4">
-                    Save
-                </button>
-            </div>
-
-            </form>
-
-        </div>
-
-    </div>
-</div>
-
-{% endblock %}
+    {% endblock %}
