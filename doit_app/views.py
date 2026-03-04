@@ -108,13 +108,6 @@ def todolist(request):
     return render(request, "todolist.html", context)
 
 
-@login_required
-def delete_task(request, task_id: int):
-    task = get_object_or_404(Task, id=task_id, user=request.user)
-    task.delete()
-    return redirect("todolist")
-
-
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
