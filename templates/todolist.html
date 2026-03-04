@@ -14,6 +14,20 @@
 
                     <h4 class="mb-3">To Do List</h4>
 
+                        <div class="progress mb-3" style="height: 30px;">
+                            <div id="todoProgressBar"
+                                 class="progress-bar {% if progress_percent == 100 and total_tasks > 0 %}bg-success{% else %}bg-primary{% endif %}"
+                                 role="progressbar"
+                                 style="width: {{ progress_percent }}%;"
+                                 aria-valuenow="{{ progress_percent }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 data-progress="{{ progress_percent }}"
+                                 data-total="{{ total_tasks }}">
+                                {{ progress_percent }}% Completed
+                            </div>
+                        </div>
+
                         <!-- Add New Task -->
                         <form method="POST" class="mb-3">
                             {% csrf_token %}
@@ -176,3 +190,8 @@
 </div>
 
 {% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="{% static 'javascript/todolist.js' %}"></script>
+{% endblock scripts %}

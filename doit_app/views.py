@@ -91,6 +91,9 @@ def todolist(request):
     tasks = Task.objects.filter(user=request.user)
     focus_items = FocusItem.objects.filter(user=request.user)
     notes = Note.objects.filter(user=request.user)
+    total_tasks = tasks.count()
+    completed_tasks = tasks.filter(is_completed=True).count()
+    progress_percent = round((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
     context = {
         "tasks": tasks,
@@ -98,6 +101,9 @@ def todolist(request):
         "notes": notes,
         "today": timezone.localdate().strftime("%Y-%m-%d"),
         "edit_task_id": edit_task_id,
+        "total_tasks": total_tasks,
+        "completed_tasks": completed_tasks,
+        "progress_percent": progress_percent,
     }
     return render(request, "todolist.html", context)
 
