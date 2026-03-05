@@ -27,14 +27,14 @@ TickR is a Django-based task management web app that helps users create, manage,
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Backend | Django 4.2 |
-| Database | PostgreSQL (Neon) / SQLite (local) |
-| Frontend | Bootstrap 5, custom CSS |
-| Fonts | Google Fonts — Nunito & Work Sans |
-| Static files | WhiteNoise |
-| Deployment | Heroku |
+| Layer        | Technology                         |
+| ------------ | ---------------------------------- |
+| Backend      | Django 4.2                         |
+| Database     | PostgreSQL (Neon) / SQLite (local) |
+| Frontend     | Bootstrap 5, custom CSS            |
+| Fonts        | Google Fonts — Nunito & Work Sans  |
+| Static files | WhiteNoise                         |
+| Deployment   | Heroku                             |
 
 ---
 
@@ -129,24 +129,28 @@ erDiagram
 ## Local Setup
 
 ### Prerequisites
+
 - Python 3.14
 - Git
 
 ### Steps
 
 **1. Clone the repo**
+
 ```bash
 git clone https://github.com/ValentinoFarias/Doit.git
 cd Doit
 ```
 
 **2. Create and activate a virtual environment**
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
 **3. Install dependencies**
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -161,21 +165,23 @@ os.environ.setdefault("DATABASE_URL", "your-database-url-here")
 ```
 
 **5. Run migrations**
+
 ```bash
 python manage.py migrate
 ```
 
 **6. Start the server**
+
 ```bash
 python manage.py runserver
 ```
-
 
 ---
 
 ## Deployment (Heroku)
 
 **Set environment variables on Heroku:**
+
 ```bash
 heroku config:set DATABASE_URL="your-database-url" --app doit-project
 ```
@@ -188,7 +194,6 @@ heroku config:set DATABASE_URL="your-database-url" --app doit-project
 
 ![CSS Validator Results](README-images/css-validator.png)
 
-
 ## JS Validation
 
 <img src="README-images/JS Validator.png" alt="JS validator screenshot">
@@ -199,13 +204,16 @@ heroku config:set DATABASE_URL="your-database-url" --app doit-project
 <img src="README-images/home.png" alt="Home screenshot">
 <img src="README-images/tasklist.png" alt="Tasklist screenshot">
 
----
+## Python Validations
+
+![alt text](README-images/viewsvals.png)
+![alt text](README-images/modelsval.png)
 
 ## Team
 
-| Name | Role |
-|---|---|
-| Giovanni | Developer |
-| Andre | Developer |
+| Name      | Role      |
+| --------- | --------- |
+| Giovanni  | Developer |
+| Andre     | Developer |
 | Valentino | Developer |
-| Nathalie | Developer |
+| Nathalie  | Developer |
