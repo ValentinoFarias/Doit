@@ -9,7 +9,14 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from .models import FocusItem, Note, ProjectFolder, SavedList, SavedListTask, Task
+from .models import (
+    FocusItem,
+    Note,
+    ProjectFolder,
+    SavedList,
+    SavedListTask,
+    Task,
+)
 
 
 # Create your views here.
@@ -41,7 +48,8 @@ def todolist(request):
                 return redirect("todolist")
 
             if timezone.is_naive(due_at):
-                due_at = timezone.make_aware(due_at, timezone.get_current_timezone())
+                due_at = timezone.make_aware(
+                    due_at, timezone.get_current_timezone())
 
             focus_content = request.POST.get("focus_content", "")
             notes_content = request.POST.get("notes_content", "")
@@ -68,7 +76,11 @@ def todolist(request):
                     parsed_project_folder_id = None
 
                 if parsed_project_folder_id:
-                    project_folder = get_object_or_404(ProjectFolder, id=parsed_project_folder_id, user=request.user)
+                    project_folder = get_object_or_404(
+                        ProjectFolder,
+                        id=parsed_project_folder_id,
+                        user=request.user
+                    )
 
             saved_list = SavedList.objects.create(
                 user=request.user,
@@ -159,7 +171,8 @@ def todolist(request):
         except (TypeError, ValueError):
             parsed_edit_task_id = None
 
-        if parsed_edit_task_id and Task.objects.filter(id=parsed_edit_task_id, user=request.user).exists():
+        if parsed_edit_task_id and Task.objects.filter(
+                id=parsed_edit_task_id, user=request.user).exists():
             edit_task_id = parsed_edit_task_id
 
     tasks = Task.objects.filter(user=request.user)
@@ -168,7 +181,10 @@ def todolist(request):
     project_folders = ProjectFolder.objects.filter(user=request.user)
     total_tasks = tasks.count()
     completed_tasks = tasks.filter(is_completed=True).count()
-    progress_percent = round((completed_tasks / total_tasks) * 100) if total_tasks else 0
+    progress_percent = round(
+        (completed_tasks /
+         total_tasks) *
+        100) if total_tasks else 0
 
     context = {
         "tasks": tasks,
@@ -187,7 +203,13 @@ def todolist(request):
 @login_required
 def dashboard(request):
     active_filter = request.GET.get("filter", "today")
-    valid_filters = {"notifications", "today", "upcoming", "someday", "completed", "inbox"}
+    valid_filters = {
+        "notifications",
+        "today",
+        "upcoming",
+        "someday",
+        "completed",
+        "inbox"}
     if active_filter not in valid_filters:
         active_filter = "today"
     if active_filter == "inbox":
@@ -201,34 +223,46 @@ def dashboard(request):
         except (TypeError, ValueError):
             parsed_project_id = None
 
-        if parsed_project_id and ProjectFolder.objects.filter(id=parsed_project_id, user=request.user).exists():
+        if parsed_project_id and ProjectFolder.objects.filter(
+                id=parsed_project_id, user=request.user).exists():
             active_project_id = parsed_project_id
 
     if request.method == "POST":
         if "create_project_folder" in request.POST:
-            folder_name = (request.POST.get("project_folder_name") or "").strip()
+            folder_name = (request.POST.get(
+                "project_folder_name") or "").strip()
             if folder_name:
                 try:
-                    ProjectFolder.objects.create(user=request.user, name=folder_name)
-                    messages.success(request, "Project folder created successfully.")
+                    ProjectFolder.objects.create(
+                        user=request.user, name=folder_name)
+                    messages.success(
+                        request, "Project folder created successfully.")
                 except IntegrityError:
-                    messages.error(request, "A project folder with that name already exists.")
+                    messages.error(
+                        request, "A project folder with that name "
+                        "already exists.")
             return redirect("dashboard")
 
         if "update_project_folder" in request.POST:
             try:
-                folder_id = int(request.POST.get("update_project_folder") or "")
+                folder_id = int(
+                    request.POST.get("update_project_folder") or "")
             except (TypeError, ValueError):
                 return redirect("dashboard")
 
-            new_name = (request.POST.get("project_folder_new_name") or "").strip()
-            folder = get_object_or_404(ProjectFolder, id=folder_id, user=request.user)
+            new_name = (request.POST.get(
+                "project_folder_new_name") or "").strip()
+            folder = get_object_or_404(
+                ProjectFolder, id=folder_id, user=request.user)
             if not new_name:
                 messages.error(request, "Project folder name cannot be empty.")
                 return redirect("dashboard")
 
-            if ProjectFolder.objects.filter(user=request.user, name=new_name).exclude(id=folder_id).exists():
-                messages.error(request, "A project folder with that name already exists.")
+            if ProjectFolder.objects.filter(
+                    user=request.user, name=new_name).exclude(
+                    id=folder_id).exists():
+                messages.error(
+                    request, "A project folder with that name already exists.")
                 return redirect("dashboard")
 
             folder.name = new_name
@@ -238,18 +272,21 @@ def dashboard(request):
 
         if "delete_project_folder" in request.POST:
             try:
-                folder_id = int(request.POST.get("delete_project_folder") or "")
+                folder_id = int(
+                    request.POST.get("delete_project_folder") or "")
             except (TypeError, ValueError):
                 return redirect("dashboard")
 
-            folder = get_object_or_404(ProjectFolder, id=folder_id, user=request.user)
+            folder = get_object_or_404(
+                ProjectFolder, id=folder_id, user=request.user)
             folder.delete()
             messages.success(request, "Project folder deleted successfully.")
             return redirect("dashboard")
 
         if "delete_saved_list" in request.POST:
             try:
-                saved_list_id = int(request.POST.get("delete_saved_list") or "")
+                saved_list_id = int(
+                    request.POST.get("delete_saved_list") or "")
             except (TypeError, ValueError):
                 return redirect("dashboard")
 
@@ -267,10 +304,13 @@ def dashboard(request):
                 except (TypeError, ValueError):
                     parsed_redirect_project = None
 
-                if parsed_redirect_project and ProjectFolder.objects.filter(id=parsed_redirect_project, user=request.user).exists():
+                if parsed_redirect_project and ProjectFolder.objects.filter(
+                        id=parsed_redirect_project,
+                        user=request.user).exists():
                     redirect_project_id = parsed_redirect_project
 
-            saved_list = get_object_or_404(SavedList, id=saved_list_id, user=request.user)
+            saved_list = get_object_or_404(
+                SavedList, id=saved_list_id, user=request.user)
             saved_list.delete()
             messages.success(request, "Saved list deleted successfully.")
             redirect_url = f"/dashboard/?filter={redirect_filter}"
@@ -280,7 +320,8 @@ def dashboard(request):
 
         if "move_saved_list_folder" in request.POST:
             try:
-                saved_list_id = int(request.POST.get("move_saved_list_folder") or "")
+                saved_list_id = int(
+                    request.POST.get("move_saved_list_folder") or "")
             except (TypeError, ValueError):
                 return redirect("dashboard")
 
@@ -298,11 +339,14 @@ def dashboard(request):
                 except (TypeError, ValueError):
                     parsed_redirect_project = None
 
-                if parsed_redirect_project and ProjectFolder.objects.filter(id=parsed_redirect_project, user=request.user).exists():
+                if parsed_redirect_project and ProjectFolder.objects.filter(
+                        id=parsed_redirect_project,
+                        user=request.user).exists():
                     redirect_project_id = parsed_redirect_project
 
             target_project_folder = None
-            raw_target_folder_id = request.POST.get("target_project_folder") or ""
+            raw_target_folder_id = request.POST.get(
+                "target_project_folder") or ""
             if raw_target_folder_id:
                 try:
                     parsed_target_folder_id = int(raw_target_folder_id)
@@ -310,12 +354,18 @@ def dashboard(request):
                     parsed_target_folder_id = None
 
                 if parsed_target_folder_id:
-                    target_project_folder = get_object_or_404(ProjectFolder, id=parsed_target_folder_id, user=request.user)
+                    target_project_folder = get_object_or_404(
+                        ProjectFolder,
+                        id=parsed_target_folder_id,
+                        user=request.user
+                    )
 
-            saved_list = get_object_or_404(SavedList, id=saved_list_id, user=request.user)
+            saved_list = get_object_or_404(
+                SavedList, id=saved_list_id, user=request.user)
             saved_list.project_folder = target_project_folder
             saved_list.save(update_fields=["project_folder"])
-            messages.success(request, "Saved list folder updated successfully.")
+            messages.success(
+                request, "Saved list folder updated successfully.")
 
             redirect_url = f"/dashboard/?filter={redirect_filter}"
             if redirect_project_id:
@@ -325,13 +375,17 @@ def dashboard(request):
     all_saved_lists = SavedList.objects.filter(user=request.user)
     today_date = timezone.localdate()
 
-    outstanding_tasks_count = Task.objects.filter(user=request.user, is_completed=False).count()
+    outstanding_tasks_count = Task.objects.filter(
+        user=request.user, is_completed=False).count()
     notifications_lists = all_saved_lists.filter(due_at__date=today_date)
-    notification_count = notifications_lists.count() + (1 if outstanding_tasks_count > 0 else 0)
+    notification_count = notifications_lists.count(
+    ) + (1 if outstanding_tasks_count > 0 else 0)
     today_lists = all_saved_lists.filter(due_at__date=today_date)
     upcoming_lists = all_saved_lists.filter(due_at__date__gt=today_date)
-    someday_lists = all_saved_lists.filter(due_at__date__gt=today_date + timedelta(days=30))
-    completed_lists = all_saved_lists.filter(completed_tasks__gt=0, completed_tasks=F("total_tasks"))
+    someday_lists = all_saved_lists.filter(
+        due_at__date__gt=today_date + timedelta(days=30))
+    completed_lists = all_saved_lists.filter(
+        completed_tasks__gt=0, completed_tasks=F("total_tasks"))
 
     filtered_map = {
         "notifications": notifications_lists,
@@ -385,7 +439,8 @@ def saved_list_detail(request, list_id: int):
             except (TypeError, ValueError):
                 return redirect("saved_list_detail", list_id=list_id)
 
-            item = get_object_or_404(SavedListTask, id=item_id, saved_list=saved_list)
+            item = get_object_or_404(
+                SavedListTask, id=item_id, saved_list=saved_list)
             item.is_completed = not item.is_completed
             item.save(update_fields=["is_completed"])
             refresh_saved_list_counts()
@@ -397,7 +452,8 @@ def saved_list_detail(request, list_id: int):
             except (TypeError, ValueError):
                 return redirect("saved_list_detail", list_id=list_id)
 
-            item = get_object_or_404(SavedListTask, id=item_id, saved_list=saved_list)
+            item = get_object_or_404(
+                SavedListTask, id=item_id, saved_list=saved_list)
             item.delete()
             refresh_saved_list_counts()
             return redirect("saved_list_detail", list_id=list_id)
@@ -405,7 +461,8 @@ def saved_list_detail(request, list_id: int):
         if "add_saved_task" in request.POST:
             title = (request.POST.get("new_task") or "").strip()
             if title:
-                SavedListTask.objects.create(saved_list=saved_list, title=title)
+                SavedListTask.objects.create(
+                    saved_list=saved_list, title=title)
                 refresh_saved_list_counts()
             return redirect("saved_list_detail", list_id=list_id)
 
@@ -416,7 +473,8 @@ def saved_list_detail(request, list_id: int):
                 return redirect("saved_list_detail", list_id=list_id)
 
             title = (request.POST.get("edited_task_title") or "").strip()
-            item = get_object_or_404(SavedListTask, id=item_id, saved_list=saved_list)
+            item = get_object_or_404(
+                SavedListTask, id=item_id, saved_list=saved_list)
             if title:
                 item.title = title
                 item.save(update_fields=["title"])
@@ -438,13 +496,17 @@ def saved_list_detail(request, list_id: int):
         except (TypeError, ValueError):
             parsed_edit_task_id = None
 
-        if parsed_edit_task_id and saved_list.items.filter(id=parsed_edit_task_id).exists():
+        if parsed_edit_task_id and saved_list.items.filter(
+                id=parsed_edit_task_id).exists():
             edit_task_id = parsed_edit_task_id
 
     items = saved_list.items.all()
     total_tasks = items.count()
     completed_tasks = items.filter(is_completed=True).count()
-    progress_percent = round((completed_tasks / total_tasks) * 100) if total_tasks else 0
+    progress_percent = round(
+        (completed_tasks /
+         total_tasks) *
+        100) if total_tasks else 0
 
     context = {
         "saved_list": saved_list,
