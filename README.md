@@ -184,6 +184,12 @@ heroku config:set DATABASE_URL="your-database-url" --app doit-project
 
 ---
 
+## CSS Validation
+
+![CSS Validator Results](README-images/css-validator.png)
+
+---
+
 ## Team
 
 | Name | Role |
