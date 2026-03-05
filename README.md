@@ -170,7 +170,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
 ---
 
@@ -182,6 +181,12 @@ heroku config:set DATABASE_URL="your-database-url" --app doit-project
 ```
 
 **Deploy via GitHub** — connect your repo in the Heroku dashboard and enable automatic deploys from `main`.
+
+---
+
+## CSS Validation
+
+![CSS Validator Results](README-images/css-validator.png)
 
 ---
 
