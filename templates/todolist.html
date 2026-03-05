@@ -31,7 +31,6 @@
                                 <button class="btn tickr-btn-accent" type="submit" name="add_task">Add</button>
                             </div>
                         </form>
-
                         <!-- Task List -->
                         <ul class="list-group">
                             {% for task in tasks %}
@@ -110,14 +109,10 @@
                 </div>
             </div>
         </div>
-
-
         <!-- RIGHT COLUMN -->
         <div class="col-lg-5">
-
             <form method="POST" id="saveAllForm">
                 {% csrf_token %}
-
                 <!-- FOCUS -->
                 <div class="card shadow-sm mb-4 tickr-panel">
                     <div class="card-body">
@@ -138,28 +133,32 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="text-end mt-3">
                     <button type="button"
                             id="openSaveListModal"
                             class="btn tickr-btn-accent px-4"
                             data-bs-toggle="modal"
-                            data-bs-target="#saveListModal">
-                        Save
-                    </button>
+                            data-bs-target="#saveListModal">Save</button>
                 </div>
-
             </form>
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="saveListModal" tabindex="-1" aria-labelledby="saveListModalLabel" aria-hidden="true">
+<div role="dialog"
+     class="modal fade"
+     id="saveListModal"
+     tabindex="-1"
+     aria-labelledby="saveListModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="saveListModalLabel">Save Task List</h5>
-                <button type="button" id="closeSaveListModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button"
+                        id="closeSaveListModal"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
@@ -187,20 +186,23 @@
                             class="form-select tickr-input"
                             form="saveAllForm">
                         <option value="">No folder</option>
-                        {% for folder in project_folders %}
-                            <option value="{{ folder.id }}">{{ folder.name }}</option>
-                        {% endfor %}
+                        {% for folder in project_folders %}<option value="{{ folder.id }}">{{ folder.name }}</option>{% endfor %}
                     </select>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="cancelSaveListModal" class="btn tickr-btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" name="save_list" class="btn tickr-btn-primary" form="saveAllForm">Create List</button>
+                <button type="button"
+                        id="cancelSaveListModal"
+                        class="btn tickr-btn-outline-secondary"
+                        data-bs-dismiss="modal">Cancel</button>
+                <button type="submit"
+                        name="save_list"
+                        class="btn tickr-btn-primary"
+                        form="saveAllForm">Create List</button>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>

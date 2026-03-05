@@ -5,37 +5,39 @@
 {% url 'register' as signup_url %}
 {% url 'logout' as logout_url %}
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html class="h-100" lang="en">
   <head>
     <title>TickR</title>
     <meta name="description" content="A simple to-do list app." />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <!-- Font Awesome CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <!-- Custom css  -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <!-- Favicon  -->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}" />
-    
+    <link rel="icon"
+          type="image/x-icon"
+          href="{% static 'images/favicon.ico' %}" />
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{% static 'images/favicon-32x32.png' %}" />
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="{% static 'images/favicon-16x16.png' %}" />
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{% static 'images/apple-touch-icon.png' %}" />
   </head>
   <body class="d-flex flex-column h-100 main-bg">
     <!-- Navigation -->
@@ -44,88 +46,66 @@
         <a class="navbar-brand" href="{{ home_url }}">
           <img src="{% static 'images/logo.png' %}" alt="TickR" class="navbar-logo" />
         </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a
-                class="nav-link {% if request.path == home_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'home' %}"
-                >Home</a
-              >
+              <a class="nav-link {% if request.path == home_url %}active{% endif %}"
+                 aria-current="page"
+                 href="{% url 'home' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link {% if request.path == task_list_url %}active{% endif %}"
-                href="{{ task_list_url }}"
-                >Task List</a
-              >
+              <a class="nav-link {% if request.path == task_list_url %}active{% endif %}"
+                 href="{{ task_list_url }}">Task List</a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link {% if request.path == dashboard_url %}active{% endif %}"
-                href="{{ dashboard_url }}"
-                >Dashboard</a
-              >
+              <a class="nav-link {% if request.path == dashboard_url %}active{% endif %}"
+                 href="{{ dashboard_url }}">Dashboard</a>
             </li>
             {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a
-                class="nav-link {% if request.path == logout_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'logout' %}"
-                >Logout</a
-              >
-            </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path == logout_url %}active{% endif %}"
+                   aria-current="page"
+                   href="{% url 'logout' %}">Logout</a>
+              </li>
             {% else %}
-            <li class="nav-item">
-              <a
-                class="nav-link {% if request.path == signup_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'register' %}"
-                >Register</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link {% if request.path == login_url %}active{% endif %}"
-                aria-current="page"
-                href="{% url 'login' %}"
-                >Login</a
-              >
-            </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path == signup_url %}active{% endif %}"
+                   aria-current="page"
+                   href="{% url 'register' %}">Register</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path == login_url %}active{% endif %}"
+                   aria-current="page"
+                   href="{% url 'login' %}">Login</a>
+              </li>
             {% endif %}
           </ul>
           {% if user.is_authenticated %}
-          <span class="badge state rounded-pill"
-            >You are logged in as {{ user }}</span
-          >
+            <span class="badge state rounded-pill">You are logged in as {{ user }}</span>
           {% else %}
-          <span class="badge state rounded-pill">You are not logged in</span>
+            <span class="badge state rounded-pill">You are not logged in</span>
           {% endif %}
         </div>
       </div>
     </nav>
     <main class="flex-shrink-0 main-bg">
       {% block content %}
-      <!-- Content Goes here -->
+        <!-- Content Goes here -->
       {% endblock content %}
     </main>
     <!-- Footer -->
     <footer class="footer mt-auto py-4 border-top">
       <div class="container team-footer">
-        <h5 class="mb-3 text-center">Team X</h5>
+        <h2 class="h5 mb-3 text-center">Team X</h2>
         <div class="row g-3 justify-content-center text-center">
           <div class="col-6 col-md-3">
             <div class="team-member">
@@ -155,13 +135,11 @@
       </div>
     </footer>
     <!-- Bootstrap Bundle with Popper -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
     {% block scripts %}
-    <!-- Page-specific scripts go here -->
+      <!-- Page-specific scripts go here -->
     {% endblock scripts %}
   </body>
 </html>
