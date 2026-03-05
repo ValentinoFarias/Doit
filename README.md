@@ -192,6 +192,13 @@ heroku config:set DATABASE_URL="your-database-url" --app doit-project
 ## JS Validation
 
 <img src="README-images/JS Validator.png" alt="JS validator screenshot">
+
+## HTML Validation
+
+<img src="README-images/dashboard.png" alt="Dashboard screenshot">
+<img src="README-images/home.png" alt="Home screenshot">
+<img src="README-images/tasklist.png" alt="Tasklist screenshot">
+
 ---
 
 ## Team
