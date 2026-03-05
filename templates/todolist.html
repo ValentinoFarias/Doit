@@ -43,7 +43,9 @@
                                             <button type="submit"
                                                     name="toggle_task"
                                                     value="{{ task.id }}"
-                                                    class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}">
+                                                    class="btn btn-sm {% if task.is_completed %}tickr-btn-secondary{% else %}tickr-btn-outline-secondary{% endif %}"
+                                                    aria-label="{% if task.is_completed %}Mark incomplete{% else %}Mark complete{% endif %}"
+                                                    title="{% if task.is_completed %}Mark incomplete{% else %}Mark complete{% endif %}">
                                                 ✓
                                             </button>
                                         </form>
