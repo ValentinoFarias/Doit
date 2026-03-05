@@ -1,3 +1,4 @@
+/* jshint esversion: 11 */
 (function () {
   const progressBar = document.getElementById("todoProgressBar");
   const openSaveListModalButton = document.getElementById("openSaveListModal");
